@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ttokutake/http-dataloader/issues"
   },
-  "homepage": "https://github.com/ttokutake/http-dataloader#readme"
+  "homepage": "https://github.com/ttokutake/http-dataloader#readme",
+  "dependencies": {
+    "dataloader": "^1.4.0"
+  }
 }
