@@ -1,0 +1,19 @@
+{
+  "name": "http-dataloader",
+  "version": "0.0.1",
+  "description": "Load data via HTTP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttokutake/http-dataloader.git"
+  },
+  "author": "ttokutake <tadatoshi.tokutake@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ttokutake/http-dataloader/issues"
+  },
+  "homepage": "https://github.com/ttokutake/http-dataloader#readme"
+}
