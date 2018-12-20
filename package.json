@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ttokutake/http-dataloader#readme",
   "dependencies": {
-    "dataloader": "^1.4.0"
+    "dataloader": "^1.4.0",
+    "isomorphic-fetch": "^2.2.1"
   }
 }
