@@ -59,8 +59,8 @@ class HttpDataLoader {
           parseText
         };
       });
-    const dataLoader = new DataLoader(
-      (keys: Array<string>) => Promise.all(keys.map((key: string) => request(this.params[key])))
+    const dataLoader = new DataLoader<string, any>(
+      keys => Promise.all(keys.map(key => request(this.params[key])))
     );
     this.data.push(dataLoader);
   }
@@ -71,7 +71,13 @@ class HttpDataLoader {
   }
 
   async load(...keys: Array<string>): Promise<any> {
-    const result = await Promise.all(keys.map((key: string) => this.getDataLoader(key).load(key)));
+    const result = await Promise.all(keys.map(key => {
+      const data = this.getDataLoader(key);
+      if (!data) {
+        throw new ReferenceError(`Data for "key=${key}" is not set`);
+      }
+      return data.load(key);
+    }));
     if (result.length === 1) {
       return result[0];
     }
