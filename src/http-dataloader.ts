@@ -1,4 +1,4 @@
-import * as DataLoader from 'dataloader';
+import DataLoader = require('dataloader');
 import 'isomorphic-fetch';
 
 enum ResponseType {
@@ -79,4 +79,4 @@ class HttpDataLoader {
   }
 }
 
-export default new HttpDataLoader();
+export = new HttpDataLoader();
