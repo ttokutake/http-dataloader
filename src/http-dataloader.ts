@@ -44,10 +44,13 @@ async function request({ url, requestInit, responseType, parseText }: ParamsEntr
 }
 
 class HttpDataLoader {
-  params: {[key: string]: ParamsEntry} = {};
-  data: Array<DataLoader<string, any>> = [];
+  private params: {[key: string]: ParamsEntry} = {};
+  private data: Array<DataLoader<string, any>> = [];
 
   set(...params: Array<SetterParamsEntry>): void {
+    if (!params.length) {
+      throw new TypeError("Arguments must not be empty");
+    }
     params
       .filter(({ key }: SetterParamsEntry) => !this.params[key])
       .forEach(({ key, url, requestInit, responseType, parseText }: SetterParamsEntry) => {
@@ -65,12 +68,15 @@ class HttpDataLoader {
     this.data.push(dataLoader);
   }
 
-  getDataLoader(key: string): DataLoader<string, any> {
+  private getDataLoader(key: string): DataLoader<string, any> | null {
     const { index } = this.params[key];
-    return this.data[index];
+    return index === undefined ? null : this.data[index];
   }
 
   async load(...keys: Array<string>): Promise<any> {
+    if (!keys.length) {
+      throw new TypeError("Arguments must not be empty");
+    }
     const result = await Promise.all(keys.map(key => {
       const data = this.getDataLoader(key);
       if (!data) {
