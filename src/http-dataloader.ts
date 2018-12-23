@@ -36,14 +36,14 @@ async function request({
     );
   }
   switch (responseType) {
-    case "text": {
+    case ResponseType.Text: {
       return resp.text();
     }
-    case "custom": {
+    case ResponseType.Custom: {
       const respBody = await resp.text();
       return parseText ? parseText(respBody) : respBody;
     }
-    case "json":
+    case ResponseType.Json:
     default: {
       return resp.json();
     }
