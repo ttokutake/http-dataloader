@@ -89,6 +89,21 @@ class HttpDataLoader {
     }
     return result;
   }
+
+  clear(...keys: Array<string>): this {
+    if (!keys.length) {
+      this.data.forEach(data => {
+        data.clearAll();
+      });
+    }
+    keys.forEach(key => {
+      const data = this.getDataLoader(key);
+      if (data) {
+        data.clear(key);
+      }
+    });
+    return this;
+  }
 }
 
 export = new HttpDataLoader();
