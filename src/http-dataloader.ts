@@ -10,7 +10,7 @@ enum ResponseType {
 interface SetterParamsEntry {
   key: string;
   url: string;
-  options?: Object;
+  requestInit?: RequestInit;
   responseType?: ResponseType;
   parseText?: (text: string) => any;
 }
@@ -18,13 +18,13 @@ interface SetterParamsEntry {
 interface ParamsEntry {
   index: number;
   url: string;
-  options: Object;
+  requestInit: RequestInit;
   responseType: ResponseType;
   parseText?: (text: string) => any;
 }
 
-async function request({ url, options, responseType, parseText }: ParamsEntry): Promise<any> {
-  const resp = await fetch(url, options);
+async function request({ url, requestInit, responseType, parseText }: ParamsEntry): Promise<any> {
+  const resp = await fetch(url, requestInit);
   if (resp.status >= 400) {
     throw new URIError(`HTTP response's status is ${resp.status}, body is "${await resp.text()}"`);
   }
@@ -50,11 +50,11 @@ class HttpDataLoader {
   set(...params: Array<SetterParamsEntry>): void {
     params
       .filter(({ key }: SetterParamsEntry) => !this.params[key])
-      .forEach(({ key, url, options, responseType, parseText }: SetterParamsEntry) => {
+      .forEach(({ key, url, requestInit, responseType, parseText }: SetterParamsEntry) => {
         this.params[key] = {
           index: this.data.length,
           url,
-          options: options || {},
+          requestInit: requestInit || {},
           responseType: responseType || ResponseType.Json,
           parseText
         };
