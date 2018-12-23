@@ -40,8 +40,8 @@ async function request({
       return resp.text();
     }
     case ResponseType.Custom: {
-      const respBody = await resp.text();
-      return parseText ? parseText(respBody) : respBody;
+      const text = await resp.text();
+      return parseText ? parseText(text) : text;
     }
     case ResponseType.Json:
     default: {
