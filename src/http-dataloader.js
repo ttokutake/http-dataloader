@@ -31,7 +31,8 @@ async function request(url, options) {
 
 class HttpDataLoader {
   constructor() {
-    this.data = {};
+    this.params = {};
+    this.data = [];
   }
 
   set(...params) {
@@ -47,18 +48,23 @@ class HttpDataLoader {
         throw new TypeError('"options" must be Object, Null or Undefined');
       }
     }
-    const ps = params.filter(({ key }) => !this.data[key]);
-    const paramsMap = {};
-    ps.forEach(param => {
-      paramsMap[param.key] = param;
+    params.filter(({ key }) => !this.params[key]).forEach(({ key, url, options }) => {
+      this.params[key] = {
+        index: this.data.length,
+        url,
+        options: options || {}
+      };
     });
     const dataLoader = new DataLoader(keys => Promise.all(keys.map(key => {
-      const { url, options } = paramsMap[key];
-      return request(url, options || {});
+      const { url, options } = this.params[key];
+      return request(url, options);
     })));
-    ps.forEach(({ key }) => {
-      this.data[key] = dataLoader;
-    });
+    this.data.push(dataLoader);
+  }
+
+  getDataLoader(key) {
+    const { index } = this.params[key];
+    return this.data[index];
   }
 
   async load(...keys) {
@@ -70,11 +76,11 @@ class HttpDataLoader {
       if (typeof key !== 'string') {
         throw new TypeError('"key" must be String');
       }
-      if (!(this.data[key] instanceof DataLoader)) {
+      if (!(this.getDataLoader(key) instanceof DataLoader)) {
         throw new ReferenceError(`"url" whose "key" is "${key}" is not set`);
       }
     }
-    const result = await Promise.all(keys.map(key => this.data[key].load(key)));
+    const result = await Promise.all(keys.map(key => this.getDataLoader(key).load(key)));
     if (result.length === 1) {
       return result[0];
     }
