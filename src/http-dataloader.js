@@ -3,29 +3,22 @@ require('isomorphic-fetch');
 
 async function request(url, options) {
   const { responseType, parseText } = options;
-  if (responseType === 'custom' && typeof parseText !== 'function') {
-    throw new TypeError('"parseText" must be Function when "responseType" is "custom"');
+  const resp = await fetch(url, options);
+  if (resp.status >= 400) {
+    throw new URIError(`HTTP response's status is ${resp.status}, body is "${await resp.text()}"`);
   }
-  try {
-    const resp = await fetch(url, options);
-    if (resp.status >= 400) {
-      throw new URIError(`HTTP response's status is ${resp.status}, body is "${await resp.text()}"`);
+  switch (responseType) {
+    case 'text': {
+      return resp.text();
     }
-    switch (responseType) {
-      case 'text': {
-        return resp.text();
-      }
-      case 'custom': {
-        const respBody = await resp.text();
-        return parseText(respBody);
-      }
-      case 'json':
-      default: {
-        return resp.json();
-      }
+    case 'custom': {
+      const respBody = await resp.text();
+      return parseText(respBody);
     }
-  } catch (err) {
-    throw err;
+    case 'json':
+    default: {
+      return resp.json();
+    }
   }
 }
 
@@ -46,6 +39,9 @@ class HttpDataLoader {
       }
       if (!(typeof options === 'object' || options === undefined)) {
         throw new TypeError('"options" must be Object, Null or Undefined');
+      }
+      if (options && options.responseType === 'custom' && typeof options.parseText !== 'function') {
+        throw new TypeError('"options.parseText" must be Function when "options.responseType" is "custom"');
       }
     }
     params.filter(({ key }) => !this.params[key]).forEach(({ key, url, options }) => {
