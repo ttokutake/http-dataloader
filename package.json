@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
+    "lint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts' --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,7 @@
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
+    "tslint": "^5.12.0",
     "typescript": "^3.2.2"
   }
 }
