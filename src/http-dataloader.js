@@ -69,7 +69,7 @@ class HttpDataLoader {
 
   async load(...keys) {
     if (!keys.length) {
-      throw new TypeError('Argument must be set');
+      throw new TypeError('Arguments must not be empty');
     }
     for (let i = 0, { length } = keys; i < length; i++) {
       const key = keys[i];
@@ -77,7 +77,7 @@ class HttpDataLoader {
         throw new TypeError('"key" must be String');
       }
       if (!(this.getDataLoader(key) instanceof DataLoader)) {
-        throw new ReferenceError(`"url" whose "key" is "${key}" is not set`);
+        throw new ReferenceError(`Data for key="${key}" is not set`);
       }
     }
     const result = await Promise.all(keys.map(key => this.getDataLoader(key).load(key)));
