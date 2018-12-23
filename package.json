@@ -4,6 +4,7 @@
   "description": "Load data via HTTP",
   "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +20,8 @@
   "dependencies": {
     "dataloader": "^1.4.0",
     "isomorphic-fetch": "^2.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^3.2.2"
   }
 }
