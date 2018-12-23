@@ -4,7 +4,7 @@ import "isomorphic-fetch";
 enum ResponseType {
   Text = "text",
   Custom = "custom",
-  Json = "json",
+  Json = "json"
 }
 
 interface ParamsEntry {
@@ -23,10 +23,17 @@ interface InternalParamsEntry {
   parseText?: (text: string) => any;
 }
 
-async function request({ url, requestInit, responseType, parseText }: InternalParamsEntry): Promise<any> {
+async function request({
+  url,
+  requestInit,
+  responseType,
+  parseText
+}: InternalParamsEntry): Promise<any> {
   const resp = await fetch(url, requestInit);
   if (resp.status >= 400) {
-    throw new URIError(`HTTP response's status is ${resp.status}, body is "${await resp.text()}"`);
+    throw new URIError(
+      `HTTP response's status is ${resp.status}, body is "${await resp.text()}"`
+    );
   }
   switch (responseType) {
     case "text": {
@@ -44,7 +51,7 @@ async function request({ url, requestInit, responseType, parseText }: InternalPa
 }
 
 class HttpDataLoader {
-  private params: {[key: string]: InternalParamsEntry} = {};
+  private params: { [key: string]: InternalParamsEntry } = {};
   private data: Array<DataLoader<string, any>> = [];
 
   public set(...params: ParamsEntry[]): void {
@@ -53,17 +60,19 @@ class HttpDataLoader {
     }
     params
       .filter(({ key }: ParamsEntry) => !this.params[key])
-      .forEach(({ key, url, requestInit, responseType, parseText }: ParamsEntry) => {
-        this.params[key] = {
-          index: this.data.length,
-          parseText,
-          requestInit: requestInit || {},
-          responseType: responseType || ResponseType.Json,
-          url,
-        };
-      });
-    const dataLoader = new DataLoader<string, any>(
-      (keys) => Promise.all(keys.map((key) => request(this.params[key]))),
+      .forEach(
+        ({ key, url, requestInit, responseType, parseText }: ParamsEntry) => {
+          this.params[key] = {
+            index: this.data.length,
+            parseText,
+            requestInit: requestInit || {},
+            responseType: responseType || ResponseType.Json,
+            url
+          };
+        }
+      );
+    const dataLoader = new DataLoader<string, any>(keys =>
+      Promise.all(keys.map(key => request(this.params[key])))
     );
     this.data.push(dataLoader);
   }
@@ -72,13 +81,15 @@ class HttpDataLoader {
     if (!keys.length) {
       throw new TypeError("Arguments must not be empty");
     }
-    const result = await Promise.all(keys.map((key) => {
-      const data = this.getDataLoader(key);
-      if (!data) {
-        throw new ReferenceError(`Data for "key=${key}" is not set`);
-      }
-      return data.load(key);
-    }));
+    const result = await Promise.all(
+      keys.map(key => {
+        const data = this.getDataLoader(key);
+        if (!data) {
+          throw new ReferenceError(`Data for "key=${key}" is not set`);
+        }
+        return data.load(key);
+      })
+    );
     if (result.length === 1) {
       return result[0];
     }
@@ -87,11 +98,11 @@ class HttpDataLoader {
 
   public clear(...keys: string[]): this {
     if (!keys.length) {
-      this.data.forEach((data) => {
+      this.data.forEach(data => {
         data.clearAll();
       });
     }
-    keys.forEach((key) => {
+    keys.forEach(key => {
       const data = this.getDataLoader(key);
       if (data) {
         data.clear(key);
