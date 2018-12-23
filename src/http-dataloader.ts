@@ -7,7 +7,7 @@ enum ResponseType {
   Json = "json",
 }
 
-interface SetterParamsEntry {
+interface ParamsEntry {
   key: string;
   url: string;
   requestInit?: RequestInit;
@@ -15,7 +15,7 @@ interface SetterParamsEntry {
   parseText?: (text: string) => any;
 }
 
-interface ParamsEntry {
+interface InternalParamsEntry {
   index: number;
   url: string;
   requestInit: RequestInit;
@@ -23,7 +23,7 @@ interface ParamsEntry {
   parseText?: (text: string) => any;
 }
 
-async function request({ url, requestInit, responseType, parseText }: ParamsEntry): Promise<any> {
+async function request({ url, requestInit, responseType, parseText }: InternalParamsEntry): Promise<any> {
   const resp = await fetch(url, requestInit);
   if (resp.status >= 400) {
     throw new URIError(`HTTP response's status is ${resp.status}, body is "${await resp.text()}"`);
@@ -44,16 +44,16 @@ async function request({ url, requestInit, responseType, parseText }: ParamsEntr
 }
 
 class HttpDataLoader {
-  private params: {[key: string]: ParamsEntry} = {};
+  private params: {[key: string]: InternalParamsEntry} = {};
   private data: Array<DataLoader<string, any>> = [];
 
-  set(...params: Array<SetterParamsEntry>): void {
+  set(...params: Array<ParamsEntry>): void {
     if (!params.length) {
       throw new TypeError("Arguments must not be empty");
     }
     params
-      .filter(({ key }: SetterParamsEntry) => !this.params[key])
-      .forEach(({ key, url, requestInit, responseType, parseText }: SetterParamsEntry) => {
+      .filter(({ key }: ParamsEntry) => !this.params[key])
+      .forEach(({ key, url, requestInit, responseType, parseText }: ParamsEntry) => {
         this.params[key] = {
           index: this.data.length,
           url,
