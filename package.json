@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
+    "format": "prettier **/*.json **/*.yml **/*.md --write",
     "lint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts' --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
