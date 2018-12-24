@@ -68,4 +68,43 @@ describe("HttpDataLoader", () => {
       "https://example.com/config.csv"
     );
   });
+
+  test("do not fetch data twice", async () => {
+    const result = await HttpDataLoader.load("config.json");
+    expect(result).toEqual({ name: "http-dataloader", version: "1.0.0" });
+    expect(global.fetch.mock.calls.length).toBe(0);
+  });
+
+  test("clear data", async () => {
+    const result = await HttpDataLoader.clear("config.json").load(
+      "config.json"
+    );
+    expect(result).toEqual({ name: "http-dataloader", version: "1.0.0" });
+    expect(global.fetch.mock.calls.length).toBe(1);
+    expect(global.fetch.mock.calls[0][0]).toBe(
+      "https://example.com/config.json"
+    );
+  });
+
+  test("clear all data", async () => {
+    HttpDataLoader.clear();
+    const [json, text, csv] = await HttpDataLoader.load(
+      "config.json",
+      "version.txt",
+      "config.csv"
+    );
+    expect(json).toEqual({ name: "http-dataloader", version: "1.0.0" });
+    expect(text).toBe("1.0.0");
+    expect(csv).toEqual(["http-dataloader", "1.0.0"]);
+    expect(global.fetch.mock.calls.length).toBe(3);
+    expect(global.fetch.mock.calls[0][0]).toBe(
+      "https://example.com/config.json"
+    );
+    expect(global.fetch.mock.calls[1][0]).toBe(
+      "https://example.com/version.txt"
+    );
+    expect(global.fetch.mock.calls[2][0]).toBe(
+      "https://example.com/config.csv"
+    );
+  });
 });
