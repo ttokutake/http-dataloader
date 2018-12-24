@@ -1,24 +1,8 @@
 {
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "target": "ES5",
-    "module": "UMD",
-    "lib": ["DOM", "ES5", "ES2015.Promise"],
-    "allowJs": false,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "outDir": "./dist/",
-    "rootDir": "./src/",
-    "removeComments": true,
-    "noEmitOnError": true,
-    "downlevelIteration": true,
-
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-
-    "moduleResolution": "node"
-  }
+    "rootDir": "./"
+  },
+  "exclude": ["node_modules", "dist"]
 }
