@@ -71,8 +71,14 @@ describe("HttpDataLoader", () => {
     });
 
     test("do not fetch data twice", async () => {
-      const result = await HttpDataLoader.load("config.json");
-      expect(result).toEqual({ name: "http-dataloader", version: "1.0.0" });
+      const [json, text, csv] = await HttpDataLoader.load(
+        "config.json",
+        "version.txt",
+        "config.csv"
+      );
+      expect(json).toEqual({ name: "http-dataloader", version: "1.0.0" });
+      expect(text).toBe("1.0.0");
+      expect(csv).toEqual(["http-dataloader", "1.0.0"]);
       expect(global.fetch.mock.calls.length).toBe(0);
     });
 
