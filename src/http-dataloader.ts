@@ -56,25 +56,29 @@ class HttpDataLoader {
   private params: { [key: string]: InternalParamsEntry } = {};
   private data: InternalDataLoader[] = [];
 
-  public set(...params: ParamsEntry[]): void {
+  public set(...params: ParamsEntry[]): this {
     if (!params.length) {
       throw new TypeError("Arguments must not be empty");
     }
-    params
-      .filter(({ key }) => !this.params[key])
-      .forEach(({ key, url, requestInit, responseType, parseText }) => {
-        this.params[key] = {
-          index: this.data.length,
-          parseText,
-          requestInit: requestInit || {},
-          responseType: responseType || ResponseType.Json,
-          url
-        };
-      });
-    const dataLoader = new DataLoader<string, any>(keys =>
-      Promise.all(keys.map(key => request(this.params[key])))
-    );
-    this.data.push(dataLoader);
+    const newParams = params.filter(({ key }) => !this.params[key]);
+    if (newParams.length) {
+      newParams.forEach(
+        ({ key, url, requestInit, responseType, parseText }) => {
+          this.params[key] = {
+            index: this.data.length,
+            parseText,
+            requestInit: requestInit || {},
+            responseType: responseType || ResponseType.Json,
+            url
+          };
+        }
+      );
+      const dataLoader = new DataLoader<string, any>(keys =>
+        Promise.all(keys.map(key => request(this.params[key])))
+      );
+      this.data.push(dataLoader);
+    }
+    return this;
   }
 
   public async load(...keys: string[]): Promise<any> {

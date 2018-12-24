@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier **/*.json **/*.yml **/*.md --write",
     "lint": "tslint -p tsconfig.base.json -c tslint.json 'src/**/*.ts' 'test/**/*.ts' --fix",
-    "test": "jest"
+    "test": "npm run build && jest"
   },
   "repository": {
     "type": "git",
