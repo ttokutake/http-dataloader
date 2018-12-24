@@ -116,8 +116,8 @@ class HttpDataLoader {
   }
 
   private getDataLoader(key: string): InternalDataLoader | null {
-    const { index } = this.params[key];
-    return index === undefined ? null : this.data[index];
+    const { index } = this.params[key] || { index: null };
+    return index === null ? null : this.data[index];
   }
 }
 
