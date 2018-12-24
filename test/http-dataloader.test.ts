@@ -14,6 +14,7 @@ describe("HttpDataLoader", () => {
     global.fetch = jest.fn(async url => {
       return {
         json: async () => ({ name: "http-dataloader", version: "1.0.0" }),
+        status: url.endsWith("/non-existent.json") ? 404 : 200,
         text: async () =>
           url.endsWith("/version.txt") ? "1.0.0" : "http-dataloader,1.0.0"
       };
@@ -34,6 +35,10 @@ describe("HttpDataLoader", () => {
         parseText: (text: string) => text.split(","),
         responseType: "custom",
         url: "https://example.com/config.csv"
+      },
+      {
+        key: "non-existent.json",
+        url: "https://example.com/non-existent.json"
       }
     );
   });
@@ -131,6 +136,12 @@ describe("HttpDataLoader", () => {
         await expect(HttpDataLoader.load("config.xml")).rejects.toBeInstanceOf(
           ReferenceError
         );
+      });
+
+      test("HTTP status is 404", async () => {
+        await expect(
+          HttpDataLoader.load("non-existent.json")
+        ).rejects.toBeInstanceOf(URIError);
       });
     });
   });
