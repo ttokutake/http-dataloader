@@ -2,7 +2,8 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./test/",
-    "noEmitOnError": false
+    "noEmitOnError": false,
+    "esModuleInterop": true
   },
   "exclude": ["node_modules", "src"]
 }

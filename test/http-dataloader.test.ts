@@ -11,10 +11,11 @@ describe("HttpDataLoader", () => {
 
   beforeEach(() => {
     origin.fetch = global.fetch;
-    global.fetch = jest.fn(async () => {
+    global.fetch = jest.fn(async url => {
       return {
         json: async () => ({ name: "http-dataloader", version: "1.0.0" }),
-        text: async () => "1.0.0"
+        text: async () =>
+          url.endsWith("/version.txt") ? "1.0.0" : "http-dataloader,1.0.0"
       };
     });
 
@@ -25,8 +26,14 @@ describe("HttpDataLoader", () => {
       },
       {
         key: "version.txt",
-        responseType: "text", // TODO: Error occurs if globals.ts-jest.diagnostics.warnOnly be false (default)
+        responseType: "text", // TODO: Error occurs if globals.ts-jest.diagnostics.warnOnly is false (default)
         url: "https://example.com/version.txt"
+      },
+      {
+        key: "config.csv",
+        parseText: (text: string) => text.split(","),
+        responseType: "custom",
+        url: "https://example.com/config.csv"
       }
     );
   });
@@ -50,6 +57,15 @@ describe("HttpDataLoader", () => {
     expect(global.fetch.mock.calls.length).toBe(1);
     expect(global.fetch.mock.calls[0][0]).toBe(
       "https://example.com/version.txt"
+    );
+  });
+
+  test("responseType: custom", async () => {
+    const result = await HttpDataLoader.load("config.csv");
+    expect(result).toEqual(["http-dataloader", "1.0.0"]);
+    expect(global.fetch.mock.calls.length).toBe(1);
+    expect(global.fetch.mock.calls[0][0]).toBe(
+      "https://example.com/config.csv"
     );
   });
 });
