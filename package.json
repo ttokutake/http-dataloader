@@ -38,7 +38,10 @@
     "testEnvironment": "node",
     "globals": {
       "ts-jest": {
-        "tsConfig": "tsconfig.test.json"
+        "tsConfig": "tsconfig.test.json",
+        "diagnostics": {
+          "warnOnly": true
+        }
       }
     }
   }
