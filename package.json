@@ -9,7 +9,7 @@
     "format:ci": "npm run format:base -- --list-different",
     "format:base": "prettier **/*.json **/*.yml **/*.md",
     "lint": "npm run lint:ci -- --fix",
-    "lint:ci": "tslint -p tsconfig.base.json -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
+    "lint:ci": "tslint -p tsconfig.test.json -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
     "test": "npm run build && npm run test:ci",
     "test:ci": "jest"
   },
@@ -41,6 +41,10 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "collectCoverage": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
     "globals": {
       "ts-jest": {
         "tsConfig": "tsconfig.test.json",

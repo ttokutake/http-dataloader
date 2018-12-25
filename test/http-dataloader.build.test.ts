@@ -1,4 +1,4 @@
-import HttpDataLoader = require("../src/http-dataloader");
+import HttpDataLoader = require("../dist/http-dataloader");
 
 interface Global {
   fetch?: any;
