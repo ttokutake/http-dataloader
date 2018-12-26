@@ -10,8 +10,9 @@
     "format:base": "prettier **/*.json **/*.yml **/*.md",
     "lint": "npm run lint:ci -- --fix",
     "lint:ci": "tslint -p tsconfig.test.json -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "npm run build && npm run test:ci",
-    "test:ci": "jest"
+    "test": "npm run build && npm run test:base",
+    "test:ci": "npm run test && codecov",
+    "test:base": "jest"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
+    "codecov": "^3.1.0",
     "jest": "^23.6.0",
     "prettier": "^1.15.3",
     "ts-jest": "^23.10.5",
@@ -40,7 +42,6 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "collectCoverage": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.ts"
