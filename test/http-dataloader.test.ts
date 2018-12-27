@@ -26,14 +26,20 @@ describe("HttpDataLoader", () => {
         url: "https://example.com/config.json"
       },
       {
+        key: "config.json.name",
+        responseType: "json", // TODO: Error occurs if globals.ts-jest.diagnostics.warnOnly is false (default)
+        transform: (json: any) => json.name,
+        url: "https://example.com/config.json"
+      },
+      {
         key: "version.txt",
-        responseType: "text", // TODO: Error occurs if globals.ts-jest.diagnostics.warnOnly is false (default)
+        responseType: "text",
         url: "https://example.com/version.txt"
       },
       {
         key: "config.csv",
-        parseText: (text: string) => text.split(","),
-        responseType: "custom",
+        responseType: "text",
+        transform: (text: string) => text.split(","),
         url: "https://example.com/config.csv"
       },
       {
@@ -48,7 +54,7 @@ describe("HttpDataLoader", () => {
   });
 
   describe("ok", () => {
-    test("responseType: json", async () => {
+    test("responseType=json", async () => {
       const result = await HttpDataLoader.load("config.json");
       expect(result).toEqual({ name: "http-dataloader", version: "1.0.0" });
       expect(global.fetch.mock.calls.length).toBe(1);
@@ -57,7 +63,16 @@ describe("HttpDataLoader", () => {
       );
     });
 
-    test("responseType: text", async () => {
+    test("responseType=json with transform", async () => {
+      const result = await HttpDataLoader.load("config.json.name");
+      expect(result).toEqual("http-dataloader");
+      expect(global.fetch.mock.calls.length).toBe(1);
+      expect(global.fetch.mock.calls[0][0]).toBe(
+        "https://example.com/config.json"
+      );
+    });
+
+    test("responseType=text", async () => {
       const result = await HttpDataLoader.load("version.txt");
       expect(result).toBe("1.0.0");
       expect(global.fetch.mock.calls.length).toBe(1);
@@ -66,7 +81,7 @@ describe("HttpDataLoader", () => {
       );
     });
 
-    test("responseType: custom", async () => {
+    test("responseType=text with transform", async () => {
       const result = await HttpDataLoader.load("config.csv");
       expect(result).toEqual(["http-dataloader", "1.0.0"]);
       expect(global.fetch.mock.calls.length).toBe(1);

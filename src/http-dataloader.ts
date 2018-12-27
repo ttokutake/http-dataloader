@@ -3,7 +3,6 @@ import "isomorphic-fetch";
 
 enum ResponseType {
   Text = "text",
-  Custom = "custom",
   Json = "json"
 }
 
@@ -12,7 +11,7 @@ interface ParamsEntry {
   url: string;
   requestInit?: RequestInit;
   responseType?: ResponseType;
-  parseText?: (text: string) => any;
+  transform?: (body: any) => any;
 }
 
 interface InternalParamsEntry {
@@ -20,14 +19,14 @@ interface InternalParamsEntry {
   url: string;
   requestInit: RequestInit;
   responseType: ResponseType;
-  parseText?: (text: string) => any;
+  transform?: (body: any) => any;
 }
 
 async function request({
   url,
   requestInit,
   responseType,
-  parseText
+  transform
 }: InternalParamsEntry): Promise<any> {
   const resp = await fetch(url, requestInit);
   if (resp.status >= 400) {
@@ -35,19 +34,18 @@ async function request({
       `HTTP response's status is ${resp.status}, body is "${await resp.text()}"`
     );
   }
+  let body: any;
   switch (responseType) {
     case ResponseType.Text: {
-      return resp.text();
-    }
-    case ResponseType.Custom: {
-      const text = await resp.text();
-      return parseText ? parseText(text) : text;
+      body = await resp.text();
+      break;
     }
     case ResponseType.Json:
     default: {
-      return resp.json();
+      body = await resp.json();
     }
   }
+  return transform ? transform(body) : body;
 }
 
 type InternalDataLoader = DataLoader<string, any>;
@@ -63,12 +61,12 @@ class HttpDataLoader {
     const newParams = params.filter(({ key }) => !this.params[key]);
     if (newParams.length) {
       newParams.forEach(
-        ({ key, url, requestInit, responseType, parseText }) => {
+        ({ key, url, requestInit, responseType, transform }) => {
           this.params[key] = {
             index: this.data.length,
-            parseText,
             requestInit: requestInit || {},
             responseType: responseType || ResponseType.Json,
+            transform,
             url
           };
         }
