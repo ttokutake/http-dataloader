@@ -2,7 +2,6 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "rootDir": "./",
-    "noEmitOnError": false,
     "esModuleInterop": true
   },
   "exclude": ["node_modules"]

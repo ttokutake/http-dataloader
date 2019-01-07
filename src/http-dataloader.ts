@@ -1,12 +1,12 @@
 import DataLoader = require("dataloader");
 import "isomorphic-fetch";
 
-enum ResponseType {
+export enum ResponseType {
   Text = "text",
   Json = "json"
 }
 
-interface ParamsEntry {
+export interface ParamsEntry {
   key: string;
   url: string;
   requestInit?: RequestInit;
@@ -119,4 +119,4 @@ class HttpDataLoader {
   }
 }
 
-export = new HttpDataLoader();
+export default new HttpDataLoader();

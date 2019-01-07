@@ -1,4 +1,4 @@
-import HttpDataLoader = require("../src/http-dataloader");
+import HttpDataLoader, { ResponseType } from "../src/http-dataloader";
 
 interface Global {
   fetch?: any;
@@ -27,18 +27,18 @@ describe("HttpDataLoader", () => {
       },
       {
         key: "config.json.name",
-        responseType: "json", // TODO: Error occurs if globals.ts-jest.diagnostics.warnOnly is false (default)
+        responseType: ResponseType.Json,
         transform: (json: any) => json.name,
         url: "https://example.com/config.json"
       },
       {
         key: "version.txt",
-        responseType: "text",
+        responseType: ResponseType.Text,
         url: "https://example.com/version.txt"
       },
       {
         key: "config.csv",
-        responseType: "text",
+        responseType: ResponseType.Text,
         transform: (text: string) => text.split(","),
         url: "https://example.com/config.csv"
       },
