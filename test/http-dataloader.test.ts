@@ -114,8 +114,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("clear all data", async () => {
-      HttpDataLoader.clear();
-      const [json, text, csv] = await HttpDataLoader.load(
+      const [json, text, csv] = await HttpDataLoader.clear().load(
         "config.json",
         "version.txt",
         "config.csv"
