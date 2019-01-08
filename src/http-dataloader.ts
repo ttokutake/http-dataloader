@@ -116,10 +116,8 @@ class HttpDataLoader {
   }
 
   private getDataLoader(key: string): InternalDataLoader | null {
-    const internalParamsEntry = this.params[key];
-    return internalParamsEntry
-      ? this.dataLoaders[internalParamsEntry.index]
-      : null;
+    const paramsEntry = this.params[key];
+    return paramsEntry ? this.dataLoaders[paramsEntry.index] : null;
   }
 }
 
