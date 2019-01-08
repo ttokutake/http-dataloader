@@ -55,9 +55,6 @@ class HttpDataLoader {
   private data: InternalDataLoader[] = [];
 
   public set(...params: ParamsEntry[]): this {
-    if (!params.length) {
-      throw new TypeError("Arguments must not be empty");
-    }
     const newParams = params.filter(({ key }) => !this.params[key]);
     if (newParams.length) {
       newParams.forEach(

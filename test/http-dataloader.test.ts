@@ -136,11 +136,6 @@ describe("HttpDataLoader", () => {
   });
 
   describe("error", () => {
-    test("set()", () => {
-      const run = () => HttpDataLoader.set();
-      expect(run).toThrow(TypeError);
-    });
-
     describe("load()", () => {
       test("empty arguments", async () => {
         await expect(HttpDataLoader.load()).rejects.toBeInstanceOf(TypeError);
