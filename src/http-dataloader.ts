@@ -76,12 +76,12 @@ class HttpDataLoader {
     return this;
   }
 
-  public async load(key: string): Promise<any> {
-    const [result] = await this.loadAll(key);
+  public async loadOne(key: string): Promise<any> {
+    const [result] = await this.load(key);
     return result;
   }
 
-  public loadAll(...keys: string[]): Promise<any[]> {
+  public load(...keys: string[]): Promise<any[]> {
     return Promise.all(
       keys.map(key => {
         const data = this.getDataLoader(key);

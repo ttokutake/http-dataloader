@@ -55,7 +55,7 @@ describe("HttpDataLoader", () => {
 
   describe("ok", () => {
     test("responseType=json", async () => {
-      const result = await HttpDataLoader.load("config.json");
+      const result = await HttpDataLoader.loadOne("config.json");
       expect(result).toEqual({ name: "http-dataloader", version: "1.0.0" });
       expect(global.fetch.mock.calls.length).toBe(1);
       expect(global.fetch.mock.calls[0][0]).toBe(
@@ -64,7 +64,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("responseType=json with transform", async () => {
-      const result = await HttpDataLoader.load("config.json.name");
+      const result = await HttpDataLoader.loadOne("config.json.name");
       expect(result).toEqual("http-dataloader");
       expect(global.fetch.mock.calls.length).toBe(1);
       expect(global.fetch.mock.calls[0][0]).toBe(
@@ -73,7 +73,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("responseType=text", async () => {
-      const result = await HttpDataLoader.load("version.txt");
+      const result = await HttpDataLoader.loadOne("version.txt");
       expect(result).toBe("1.0.0");
       expect(global.fetch.mock.calls.length).toBe(1);
       expect(global.fetch.mock.calls[0][0]).toBe(
@@ -82,7 +82,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("responseType=text with transform", async () => {
-      const result = await HttpDataLoader.load("config.csv");
+      const result = await HttpDataLoader.loadOne("config.csv");
       expect(result).toEqual(["http-dataloader", "1.0.0"]);
       expect(global.fetch.mock.calls.length).toBe(1);
       expect(global.fetch.mock.calls[0][0]).toBe(
@@ -91,7 +91,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("do not fetch data twice", async () => {
-      const [json, text, csv] = await HttpDataLoader.loadAll(
+      const [json, text, csv] = await HttpDataLoader.load(
         "config.json",
         "version.txt",
         "config.csv"
@@ -103,7 +103,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("clear data", async () => {
-      const result = await HttpDataLoader.clear("config.json").load(
+      const result = await HttpDataLoader.clear("config.json").loadOne(
         "config.json"
       );
       expect(result).toEqual({ name: "http-dataloader", version: "1.0.0" });
@@ -114,7 +114,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("clear all data", async () => {
-      const [json, text, csv] = await HttpDataLoader.clearAll().loadAll(
+      const [json, text, csv] = await HttpDataLoader.clearAll().load(
         "config.json",
         "version.txt",
         "config.csv"
@@ -136,18 +136,16 @@ describe("HttpDataLoader", () => {
   });
 
   describe("error", () => {
-    describe("load()", () => {
-      test("non-existent key", async () => {
-        await expect(HttpDataLoader.load("config.xml")).rejects.toBeInstanceOf(
-          ReferenceError
-        );
-      });
+    test("load by non-existent key", async () => {
+      await expect(HttpDataLoader.loadOne("config.xml")).rejects.toBeInstanceOf(
+        ReferenceError
+      );
+    });
 
-      test("HTTP status is 404", async () => {
-        await expect(
-          HttpDataLoader.load("non-existent.json")
-        ).rejects.toBeInstanceOf(URIError);
-      });
+    test("load but HTTP status is 404", async () => {
+      await expect(
+        HttpDataLoader.loadOne("non-existent.json")
+      ).rejects.toBeInstanceOf(URIError);
     });
   });
 });
