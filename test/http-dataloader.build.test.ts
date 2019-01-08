@@ -137,15 +137,21 @@ describe("HttpDataLoader", () => {
 
   describe("error", () => {
     test("load by non-existent key", async () => {
-      await expect(HttpDataLoader.loadOne("config.xml")).rejects.toBeInstanceOf(
+      await expect(HttpDataLoader.load("config.xml")).rejects.toBeInstanceOf(
         ReferenceError
       );
     });
 
     test("load but HTTP status is 404", async () => {
       await expect(
-        HttpDataLoader.loadOne("non-existent.json")
+        HttpDataLoader.load("non-existent.json")
       ).rejects.toBeInstanceOf(URIError);
+    });
+
+    test("clear by non-existent key", async () => {
+      await expect(HttpDataLoader.clear("config.xml")).rejects.toBeInstanceOf(
+        ReferenceError
+      );
     });
   });
 });

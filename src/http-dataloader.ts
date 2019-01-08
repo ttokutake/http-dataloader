@@ -90,9 +90,6 @@ class HttpDataLoader {
     return Promise.all(
       keys.map(key => {
         const dataLoader = this.getDataLoader(key);
-        if (!dataLoader) {
-          throw new ReferenceError(`Data for "key=${key}" is not set`);
-        }
         return dataLoader.load(key);
       })
     );
@@ -101,9 +98,7 @@ class HttpDataLoader {
   public clear(...keys: string[]): this {
     for (const key of keys) {
       const dataLoader = this.getDataLoader(key);
-      if (dataLoader) {
-        dataLoader.clear(key);
-      }
+      dataLoader.clear(key);
     }
     return this;
   }
@@ -115,9 +110,12 @@ class HttpDataLoader {
     return this;
   }
 
-  private getDataLoader(key: string): InternalDataLoader | null {
+  private getDataLoader(key: string): InternalDataLoader {
     const paramsEntry = this.params[key];
-    return paramsEntry ? this.dataLoaders[paramsEntry.index] : null;
+    if (!paramsEntry) {
+      throw new ReferenceError(`Data for "key=${key}" is not set`);
+    }
+    return this.dataLoaders[paramsEntry.index];
   }
 }
 
