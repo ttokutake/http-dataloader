@@ -56,23 +56,28 @@ class HttpDataLoader {
 
   public set(...params: ParamsEntry[]): this {
     const newParams = params.filter(({ key }) => !this.params[key]);
-    if (newParams.length) {
-      newParams.forEach(
-        ({ key, url, requestInit, responseType, transform }) => {
-          this.params[key] = {
-            index: this.data.length,
-            requestInit: requestInit || {},
-            responseType: responseType || ResponseType.Json,
-            transform,
-            url
-          };
-        }
-      );
-      const dataLoader = new DataLoader<string, any>(keys =>
-        Promise.all(keys.map(key => request(this.params[key])))
-      );
-      this.data.push(dataLoader);
+    if (!newParams.length) {
+      return this;
     }
+    for (const {
+      key,
+      url,
+      requestInit,
+      responseType,
+      transform
+    } of newParams) {
+      this.params[key] = {
+        index: this.data.length,
+        requestInit: requestInit || {},
+        responseType: responseType || ResponseType.Json,
+        transform,
+        url
+      };
+    }
+    const dataLoader = new DataLoader<string, any>(keys =>
+      Promise.all(keys.map(key => request(this.params[key])))
+    );
+    this.data.push(dataLoader);
     return this;
   }
 
@@ -94,19 +99,19 @@ class HttpDataLoader {
   }
 
   public clear(...keys: string[]): this {
-    keys.forEach(key => {
+    for (const key of keys) {
       const data = this.getDataLoader(key);
       if (data) {
         data.clear(key);
       }
-    });
+    }
     return this;
   }
 
   public clearAll(): this {
-    this.data.forEach(data => {
+    for (const data of this.data) {
       data.clearAll();
-    });
+    }
     return this;
   }
 
