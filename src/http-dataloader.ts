@@ -76,11 +76,13 @@ class HttpDataLoader {
     return this;
   }
 
-  public async load(...keys: string[]): Promise<any> {
-    if (!keys.length) {
-      throw new TypeError("Arguments must not be empty");
-    }
-    const result = await Promise.all(
+  public async load(key: string): Promise<any> {
+    const [result] = await this.loadAll(key);
+    return result;
+  }
+
+  public loadAll(...keys: string[]): Promise<any[]> {
+    return Promise.all(
       keys.map(key => {
         const data = this.getDataLoader(key);
         if (!data) {
@@ -89,10 +91,6 @@ class HttpDataLoader {
         return data.load(key);
       })
     );
-    if (result.length === 1) {
-      return result[0];
-    }
-    return result;
   }
 
   public clear(...keys: string[]): this {

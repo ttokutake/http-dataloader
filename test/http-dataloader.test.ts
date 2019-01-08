@@ -91,7 +91,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("do not fetch data twice", async () => {
-      const [json, text, csv] = await HttpDataLoader.load(
+      const [json, text, csv] = await HttpDataLoader.loadAll(
         "config.json",
         "version.txt",
         "config.csv"
@@ -114,7 +114,7 @@ describe("HttpDataLoader", () => {
     });
 
     test("clear all data", async () => {
-      const [json, text, csv] = await HttpDataLoader.clearAll().load(
+      const [json, text, csv] = await HttpDataLoader.clearAll().loadAll(
         "config.json",
         "version.txt",
         "config.csv"
@@ -137,10 +137,6 @@ describe("HttpDataLoader", () => {
 
   describe("error", () => {
     describe("load()", () => {
-      test("empty arguments", async () => {
-        await expect(HttpDataLoader.load()).rejects.toBeInstanceOf(TypeError);
-      });
-
       test("non-existent key", async () => {
         await expect(HttpDataLoader.load("config.xml")).rejects.toBeInstanceOf(
           ReferenceError
