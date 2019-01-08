@@ -148,10 +148,8 @@ describe("HttpDataLoader", () => {
       ).rejects.toBeInstanceOf(URIError);
     });
 
-    test("clear by non-existent key", async () => {
-      await expect(HttpDataLoader.clear("config.xml")).rejects.toBeInstanceOf(
-        ReferenceError
-      );
+    test("clear by non-existent key", () => {
+      expect(() => HttpDataLoader.clear("config.xml")).toThrow(ReferenceError);
     });
   });
 });

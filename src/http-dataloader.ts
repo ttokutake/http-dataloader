@@ -89,8 +89,12 @@ class HttpDataLoader {
   public load(...keys: string[]): Promise<any[]> {
     return Promise.all(
       keys.map(key => {
-        const dataLoader = this.getDataLoader(key);
-        return dataLoader.load(key);
+        try {
+          const dataLoader = this.getDataLoader(key);
+          return dataLoader.load(key);
+        } catch (err) {
+          return Promise.reject(err);
+        }
       })
     );
   }
