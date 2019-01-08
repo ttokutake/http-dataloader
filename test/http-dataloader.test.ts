@@ -137,6 +137,9 @@ describe("HttpDataLoader", () => {
 
   describe("error", () => {
     test("load by non-existent key", async () => {
+      await expect(HttpDataLoader.loadOne("config.xml")).rejects.toBeInstanceOf(
+        ReferenceError
+      );
       await expect(HttpDataLoader.load("config.xml")).rejects.toBeInstanceOf(
         ReferenceError
       );

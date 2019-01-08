@@ -90,8 +90,7 @@ class HttpDataLoader {
     return Promise.all(
       keys.map(key => {
         try {
-          const dataLoader = this.getDataLoader(key);
-          return dataLoader.load(key);
+          return this.getDataLoader(key).load(key);
         } catch (err) {
           return Promise.reject(err);
         }
@@ -101,8 +100,7 @@ class HttpDataLoader {
 
   public clear(...keys: string[]): this {
     for (const key of keys) {
-      const dataLoader = this.getDataLoader(key);
-      dataLoader.clear(key);
+      this.getDataLoader(key).clear(key);
     }
     return this;
   }
