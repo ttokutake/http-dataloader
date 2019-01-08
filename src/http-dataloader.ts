@@ -52,7 +52,7 @@ type InternalDataLoader = DataLoader<string, any>;
 
 class HttpDataLoader {
   private params: { [key: string]: InternalParamsEntry } = {};
-  private data: InternalDataLoader[] = [];
+  private dataLoaders: InternalDataLoader[] = [];
 
   public set(...params: ParamsEntry[]): this {
     const newParams = params.filter(({ key }) => !this.params[key]);
@@ -67,7 +67,7 @@ class HttpDataLoader {
       transform
     } of newParams) {
       this.params[key] = {
-        index: this.data.length,
+        index: this.dataLoaders.length,
         requestInit: requestInit || {},
         responseType: responseType || ResponseType.Json,
         transform,
@@ -77,7 +77,7 @@ class HttpDataLoader {
     const dataLoader = new DataLoader<string, any>(keys =>
       Promise.all(keys.map(key => request(this.params[key])))
     );
-    this.data.push(dataLoader);
+    this.dataLoaders.push(dataLoader);
     return this;
   }
 
@@ -89,35 +89,37 @@ class HttpDataLoader {
   public load(...keys: string[]): Promise<any[]> {
     return Promise.all(
       keys.map(key => {
-        const data = this.getDataLoader(key);
-        if (!data) {
+        const dataLoader = this.getDataLoader(key);
+        if (!dataLoader) {
           throw new ReferenceError(`Data for "key=${key}" is not set`);
         }
-        return data.load(key);
+        return dataLoader.load(key);
       })
     );
   }
 
   public clear(...keys: string[]): this {
     for (const key of keys) {
-      const data = this.getDataLoader(key);
-      if (data) {
-        data.clear(key);
+      const dataLoader = this.getDataLoader(key);
+      if (dataLoader) {
+        dataLoader.clear(key);
       }
     }
     return this;
   }
 
   public clearAll(): this {
-    for (const data of this.data) {
-      data.clearAll();
+    for (const dataLoader of this.dataLoaders) {
+      dataLoader.clearAll();
     }
     return this;
   }
 
   private getDataLoader(key: string): InternalDataLoader | null {
     const internalParamsEntry = this.params[key];
-    return internalParamsEntry ? this.data[internalParamsEntry.index] : null;
+    return internalParamsEntry
+      ? this.dataLoaders[internalParamsEntry.index]
+      : null;
   }
 }
 
