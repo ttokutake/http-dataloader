@@ -99,16 +99,18 @@ class HttpDataLoader {
   }
 
   public clear(...keys: string[]): this {
-    if (!keys.length) {
-      this.data.forEach(data => {
-        data.clearAll();
-      });
-    }
     keys.forEach(key => {
       const data = this.getDataLoader(key);
       if (data) {
         data.clear(key);
       }
+    });
+    return this;
+  }
+
+  public clearAll(): this {
+    this.data.forEach(data => {
+      data.clearAll();
     });
     return this;
   }
