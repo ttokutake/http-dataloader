@@ -9,7 +9,7 @@ HttpDataLoader is useful to load globally the immutable data like config file th
 
 HttpDataLoader highly depends on [DataLoader](https://github.com/facebook/dataloader) and [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch).
 
-So, you must prepare a JavaScript environment which allow to use ES6 Promise and Map classes.
+So, you must prepare a JavaScript environment which allow to use [ES6 Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) classes.
 
 ## Installation
 
