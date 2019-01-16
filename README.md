@@ -48,6 +48,8 @@ main();
 
 ### `set(...{ key: string, url: string, requestInit?: object, responseType?: "text" | "json", transform?: string | object => any }): HttpDataLoader`
 
+#### Example
+
 ```js
 import HttpDataLoader from "http-dataloader";
 
@@ -91,6 +93,8 @@ HttpDataLoader.set({ key: "config1", url: "http://example.com/config1.json" })
 
 ### `loadOne(key: string): any`
 
+#### Example
+
 ```js
 import HttpDataLoader from "http-dataloader"; // set() is done in other files
 
@@ -101,6 +105,8 @@ async function some_function() {
 ```
 
 ### `load(...keys: string[]): any[]`
+
+#### Example
 
 ```js
 import HttpDataLoader from "http-dataloader"; // set() is done in other files
@@ -116,6 +122,8 @@ async function some_function() {
 ```
 
 ### `clear(...keys: string[]): HttpDataLoader`
+
+#### Example
 
 ```js
 import HttpDataLoader from "http-dataloader"; // set() is done in other files
@@ -134,6 +142,8 @@ async function some_function() {
 ```
 
 ### `clearAll(): HttpDataLoader`
+
+#### Example
 
 ```js
 import HttpDataLoader from "http-dataloader"; // set() is done in other files
