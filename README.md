@@ -1,9 +1,21 @@
-# http-dataloader
+# HttpDataLoader
 
 [![CircleCI](https://circleci.com/gh/ttokutake/http-dataloader.svg?style=svg)](https://circleci.com/gh/ttokutake/http-dataloader)
 [![codecov](https://codecov.io/gh/ttokutake/http-dataloader/branch/master/graph/badge.svg)](https://codecov.io/gh/ttokutake/http-dataloader)
 
-`HttpDataLoader` is useful to load globally the immutable data like config file through HTTP.
+HttpDataLoader is useful to load globally the immutable data like config file through HTTP.
+
+## Notice
+
+HttpDataLoader highly depends on [DataLoader](https://github.com/facebook/dataloader) and [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch).
+
+So, you must prepare a JavaScript environment which allow to use ES6 Promise and Map classes.
+
+## Installation
+
+```bash
+npm install --save http-dataloader
+```
 
 ## Getting Started
 
