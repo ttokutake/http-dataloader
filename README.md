@@ -2,6 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/ttokutake/http-dataloader.svg?style=svg)](https://circleci.com/gh/ttokutake/http-dataloader)
 [![codecov](https://codecov.io/gh/ttokutake/http-dataloader/branch/master/graph/badge.svg)](https://codecov.io/gh/ttokutake/http-dataloader)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 HttpDataLoader is useful to load globally the immutable data like config file through HTTP.
 
