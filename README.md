@@ -7,9 +7,9 @@ HttpDataLoader is useful to load globally the immutable data like config file th
 
 ## Notice
 
-HttpDataLoader highly depends on [DataLoader](https://github.com/facebook/dataloader) and [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch).
-
-So, you must prepare a JavaScript environment which allow to use [ES6 Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) classes.
+- HttpDataLoader highly depends on [DataLoader](https://github.com/facebook/dataloader).
+- Please prepare a JavaScript environment which allow to use [ES6 Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) classes,
+  and [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API.
 
 ## Installation
 
@@ -29,13 +29,13 @@ HttpDataLoader.set({
 });
 
 async function some_function1() {
-  const config = await HttpDataLoader.loadOne("some_config"); // Fetch data from the "url"
+  const config = await HttpDataLoader.loadOne("some_config"); // Fetch the data from "url"
   // Use config as you like
   console.log(config);
 }
 
 async function some_function2() {
-  const config = await HttpDataLoader.loadOne("some_config"); // Load data on memory cache
+  const config = await HttpDataLoader.loadOne("some_config"); // Load the data on memory cache
   // Use config as you like
   console.log(config);
 }

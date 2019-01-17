@@ -1,3 +1,4 @@
+import "cross-fetch/polyfill";
 import HttpDataLoader, { ResponseType } from "../src/http-dataloader";
 
 interface Global {

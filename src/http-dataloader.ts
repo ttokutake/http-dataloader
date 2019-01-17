@@ -1,5 +1,4 @@
 import DataLoader = require("dataloader");
-import "isomorphic-fetch";
 
 export enum ResponseType {
   Text = "text",
