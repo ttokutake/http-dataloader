@@ -1,6 +1,6 @@
 {
   "name": "http-dataloader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Load data via HTTP globally",
   "main": "dist/http-dataloader.js",
   "types": "dist/http-dataloader.d.ts",
