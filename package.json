@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Load data via HTTP globally",
   "main": "dist/http-dataloader.js",
-  "typings": "dist/http-dataloader.d.ts",
+  "types": "dist/http-dataloader.d.ts",
   "files": [
     "dist",
     "README.md",
