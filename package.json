@@ -2,7 +2,7 @@
   "name": "http-dataloader",
   "version": "0.0.1",
   "description": "Load data via HTTP globally",
-  "main": "index.js",
+  "main": "dist/http-dataloader.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "format": "npm run format:base -- --write",
