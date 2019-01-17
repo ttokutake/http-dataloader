@@ -3,6 +3,12 @@
   "version": "0.0.1",
   "description": "Load data via HTTP globally",
   "main": "dist/http-dataloader.js",
+  "typings": "dist/http-dataloader.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "format": "npm run format:base -- --write",
@@ -24,6 +30,9 @@
     "url": "https://github.com/ttokutake/http-dataloader/issues"
   },
   "homepage": "https://github.com/ttokutake/http-dataloader#readme",
+  "keywords": [
+    "dataloader"
+  ],
   "dependencies": {
     "dataloader": "^1.4.0"
   },
