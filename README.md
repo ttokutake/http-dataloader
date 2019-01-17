@@ -28,13 +28,20 @@ HttpDataLoader.set({
   url: "http://example.com/some_config.json"
 });
 
-async function main() {
-  const config = await HttpDataLoader.loadOne("some_config");
+async function some_function1() {
+  const config = await HttpDataLoader.loadOne("some_config"); // Fetch data from the "url"
   // Use config as you like
   console.log(config);
 }
 
-main();
+async function some_function2() {
+  const config = await HttpDataLoader.loadOne("some_config"); // Load data on memory cache
+  // Use config as you like
+  console.log(config);
+}
+
+some_function1();
+some_function2();
 ```
 
 ### ES6 import/export
@@ -46,14 +53,24 @@ HttpDataLoader.set({
   url: "http://example.com/some_config.json"
 });
 
-function main() {
+function some_function1() {
+  // Fetch the data from "url"
   HttpDataLoader.loadOne("some_config").then(config => {
     // Use config as you like
     console.log(config);
   });
 }
 
-main();
+function some_function2() {
+  // Use the data on memory cache
+  HttpDataLoader.loadOne("some_config").then(config => {
+    // Use config as you like
+    console.log(config);
+  });
+}
+
+some_function1();
+some_function2();
 ```
 
 ## APIs
@@ -140,14 +157,14 @@ async function some_function() {
 ```js
 import HttpDataLoader from "http-dataloader"; // set() is done in other files
 
-async function some_function() {
+async function some_function1() {
   HttpDataLoader.clear("config2", "config3");
   const [config2, config3] = await HttpDataLoader.load("config2", "config3");
   // Use fresh config2 and config3 as you like
 }
 
 // You can use method chaining
-async function some_function() {
+async function some_function2() {
   const config2 = await HttpDataLoader.clear("config2").loadOne("config2");
   // Use fresh config2 as you like
 }
@@ -160,7 +177,7 @@ async function some_function() {
 ```js
 import HttpDataLoader from "http-dataloader"; // set() is done in other files
 
-async function some_function() {
+async function some_function1() {
   HttpDataLoader.clearAll();
   const [config1, config2, config3] = await HttpDataLoader.load(
     "config1",
@@ -171,7 +188,7 @@ async function some_function() {
 }
 
 // You can use method chaining
-async function some_function() {
+async function some_function2() {
   const [config1, config2, config3] = await HttpDataLoader.clearAll().loadOne(
     "config1",
     "config2",
