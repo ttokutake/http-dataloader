@@ -1,5 +1,7 @@
 import DataLoader = require("dataloader");
 
+type ResponseData = any;
+
 export enum ResponseType {
   Text = "text",
   Json = "json"
@@ -10,7 +12,7 @@ export interface ParamsEntry {
   url: string;
   requestInit?: RequestInit;
   responseType?: ResponseType;
-  transform?: (body: any) => any;
+  transform?: (body: ResponseData) => ResponseData;
 }
 
 interface InternalParamsEntry {
@@ -18,7 +20,7 @@ interface InternalParamsEntry {
   url: string;
   requestInit: RequestInit;
   responseType: ResponseType;
-  transform?: (body: any) => any;
+  transform?: (body: ResponseData) => ResponseData;
 }
 
 async function request({
@@ -26,14 +28,14 @@ async function request({
   requestInit,
   responseType,
   transform
-}: InternalParamsEntry): Promise<any> {
+}: InternalParamsEntry): Promise<ResponseData> {
   const resp = await fetch(url, requestInit);
   if (resp.status >= 400) {
     throw new URIError(
       `HTTP response's status is ${resp.status}, body is "${await resp.text()}"`
     );
   }
-  let body: any;
+  let body: ResponseData;
   switch (responseType) {
     case ResponseType.Text: {
       body = await resp.text();
@@ -47,7 +49,7 @@ async function request({
   return transform ? transform(body) : body;
 }
 
-type InternalDataLoader = DataLoader<string, any>;
+type InternalDataLoader = DataLoader<string, ResponseData>;
 
 class HttpDataLoader {
   private params: { [key: string]: InternalParamsEntry } = {};
@@ -73,19 +75,19 @@ class HttpDataLoader {
         url
       };
     }
-    const dataLoader = new DataLoader<string, any>(keys =>
+    const dataLoader: InternalDataLoader = new DataLoader(keys =>
       Promise.all(keys.map(key => request(this.params[key])))
     );
     this.dataLoaders.push(dataLoader);
     return this;
   }
 
-  public async loadOne(key: string): Promise<any> {
+  public async loadOne(key: string): Promise<ResponseData> {
     const [result] = await this.load(key);
     return result;
   }
 
-  public load(...keys: string[]): Promise<any[]> {
+  public load(...keys: string[]): Promise<ResponseData[]> {
     return Promise.all(
       keys.map(key => {
         try {
