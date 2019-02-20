@@ -1,6 +1,8 @@
 import DataLoader = require("dataloader");
 
 type ResponseData = any;
+type TransformedData = any;
+type Data = ResponseData | TransformedData;
 
 export enum ResponseType {
   Text = "text",
@@ -12,7 +14,7 @@ export interface ParamsEntry {
   url: string;
   requestInit?: RequestInit;
   responseType?: ResponseType;
-  transform?: (body: ResponseData) => ResponseData;
+  transform?: (body: ResponseData) => TransformedData;
 }
 
 interface InternalParamsEntry {
@@ -20,7 +22,7 @@ interface InternalParamsEntry {
   url: string;
   requestInit: RequestInit;
   responseType: ResponseType;
-  transform?: (body: ResponseData) => ResponseData;
+  transform?: (body: ResponseData) => TransformedData;
 }
 
 async function request({
@@ -28,7 +30,7 @@ async function request({
   requestInit,
   responseType,
   transform
-}: InternalParamsEntry): Promise<ResponseData> {
+}: InternalParamsEntry): Promise<Data> {
   const resp = await fetch(url, requestInit);
   if (resp.status >= 400) {
     throw new URIError(
@@ -49,7 +51,7 @@ async function request({
   return transform ? transform(body) : body;
 }
 
-type InternalDataLoader = DataLoader<string, ResponseData>;
+type InternalDataLoader = DataLoader<string, Data>;
 
 class HttpDataLoader {
   private params: { [key: string]: InternalParamsEntry } = {};
@@ -82,12 +84,12 @@ class HttpDataLoader {
     return this;
   }
 
-  public async loadOne(key: string): Promise<ResponseData> {
+  public async loadOne(key: string): Promise<Data> {
     const [result] = await this.load(key);
     return result;
   }
 
-  public load(...keys: string[]): Promise<ResponseData[]> {
+  public load(...keys: string[]): Promise<Data[]> {
     return Promise.all(
       keys.map(key => {
         try {
