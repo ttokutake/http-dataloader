@@ -34,7 +34,7 @@
     "dataloader"
   ],
   "dependencies": {
-    "dataloader": "^1.4.0"
+    "dataloader": "^2.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.0",
