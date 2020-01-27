@@ -37,7 +37,7 @@
     "dataloader": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.0",
+    "@types/jest": "^25.1.0",
     "codecov": "^3.1.0",
     "cross-fetch": "^3.0.0",
     "jest": "^25.1.0",
